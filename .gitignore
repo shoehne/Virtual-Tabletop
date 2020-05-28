@@ -1,0 +1,9 @@
+# Directories
+.vs
+Server/bin
+Server/bin-int
+Server/Server/bin-int
+Libraries/
+
+# Files
+*.user
