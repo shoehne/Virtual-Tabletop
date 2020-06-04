@@ -1,3 +1,12 @@
 [submodule "Libraries/spdlog"]
 	path = Libraries/spdlog
 	url = https://github.com/gabime/spdlog.git
+[submodule "Libraries/ImGui"]
+	path = Libraries/ImGui
+	url = https://github.com/shoehne/imgui
+[submodule "Libraries/GLFW"]
+	path = Libraries/GLFW
+	url = https://github.com/shoehne/glfw
+[submodule "Libraries/POCO"]
+	path = Libraries/POCO
+	url = https://github.com/shoehne/poco

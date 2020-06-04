@@ -1,7 +1,7 @@
 /*<------PCH------>*/
-#include <VTT_Client_PCH.h>
+#include "VTT_Client_PCH.h"
 
-#include <Core/Client_App.h>
+#include "Core/Client_App.h"
 
 int main(int argc, char** argv) {
 

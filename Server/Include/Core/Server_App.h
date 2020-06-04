@@ -1,4 +1,6 @@
 #pragma once
+#ifndef SERVER_APP_H
+#define SERVER_APP_H
 
 #include <Virtual_Tabletop_API.h>
 
@@ -8,6 +10,8 @@ public:
 	ServerApp();
 	~ServerApp();
 
-	void Init() override;
-	void Run() override;
+	void Init();
+	void Run();
 };
+
+#endif

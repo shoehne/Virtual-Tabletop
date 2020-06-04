@@ -21,7 +21,7 @@ namespace Virtual_TT_API {
 
 	#define EVENT_CLASS_CATEGORY(category) virtual int Get_Category_Flags() const override {return category;}
 
-	class VTT_API Event {
+	class  Event {
 
 		friend class Event_Dispatcher;
 	
@@ -40,7 +40,7 @@ namespace Virtual_TT_API {
 		bool Handled = false;
 	};
 
-	class VTT_API Event_Dispatcher {
+	class  Event_Dispatcher {
 
 		template<typename T>
 		using Event_Fn = std::function<bool(T&)>;

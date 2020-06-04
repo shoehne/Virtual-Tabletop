@@ -1,5 +1,6 @@
 #pragma once
-
+#ifndef APPLICATION_H
+#define APPLICATION_H
 /*<------Core------>*/
 #include "Core/Core.h"
 
@@ -9,13 +10,19 @@
 
 namespace Virtual_TT_API {
 
-	class VTT_API Application {
+	class  Application {
 
 	public:
-		Application() {}
-		virtual ~Application() {};
+		Application();
+		virtual ~Application();
 
-		virtual void Init() {};
-		virtual void Run() {};
+		virtual void Init() = 0;
+		virtual void Run() = 0;
+		virtual void Stop();
+
+	private:
+		bool is_running = true;
 	};
 }
+
+#endif

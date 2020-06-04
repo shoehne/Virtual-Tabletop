@@ -1,4 +1,6 @@
 #pragma once
+#ifndef LOG_H
+#define LOG_H
 
 /*<------spdlog------>*/
 #include "spdlog/spdlog.h"
@@ -9,7 +11,7 @@
 
 namespace Virtual_TT_API {
 
-	class VTT_API Log {
+	class Log {
 
 	public:
 		static void Init();
@@ -37,4 +39,4 @@ namespace Virtual_TT_API {
 #define VTT_SERVER_ERROR(...)	::Virtual_TT_API::Log::GetServerLogger()->error(__VA_ARGS__)
 #define VTT_SERVER_FATAL(...)	::Virtual_TT_API::Log::GetServerLogger()->fatal(__VA_ARGS__)
 
-
+#endif
