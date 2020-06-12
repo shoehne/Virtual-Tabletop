@@ -6,7 +6,8 @@ Server/Server/bin-int
 Libraries/
 
 # Files
-*.user
-*.sln
-*.vcxproj
-*.vcxproj.filters
+**.user
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
