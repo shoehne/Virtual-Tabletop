@@ -1,13 +1,27 @@
 # Directories
 .vs
-Server/bin
-Server/bin-int
-Server/Server/bin-int
+bin/
+bin-obj/
 Libraries/
+.codelite/
 
-# Files
+# Visual Studio files
 **.user
 **.sln
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
+
+# gmake files
+**.workspace
+**.workspace.layout
+Makefile
+Client/Client.project
+Client/Makefile
+Client/compile_flags.txt
+Server/Server.project
+Server/Makefile
+Server/compile_flags.txt
+Virtual_Tabletop_API/Virtual_Tabletop_API.project
+Virtual_Tabletop_API/Makefile
+Virtual_Tabletop_API/compile_flags.txt

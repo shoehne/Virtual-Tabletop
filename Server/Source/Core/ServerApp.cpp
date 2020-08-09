@@ -1,7 +1,7 @@
 /*<------PCH------>*/
-#include <VTT_Server_PCH.h>
+#include <VttServerPch.h>
 
-#include <Core/Server_App.h>
+#include <Core/ServerApp.h>
 
 ServerApp::ServerApp() {
 

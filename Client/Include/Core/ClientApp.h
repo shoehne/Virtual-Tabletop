@@ -2,7 +2,7 @@
 #ifndef CLIENT_APP_H
 #define CLIENT_APP_H
 
-#include <Virtual_Tabletop_API.h>
+#include <VirtualTabletopApi.h>
 
 namespace Virtual_TT_Client {
 

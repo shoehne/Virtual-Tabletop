@@ -14,8 +14,25 @@ workspace "Virtual_Tabletop"
 
 	-- Include directories relative to the premake file in root/Premake
 	Include_Dir = {}
+	Include_Dir["Poco_Foundation"] = "../Libraries/POCO/Foundation/include"
+	Include_Dir["Poco_Net"] = "../Libraries/POCO/Net/include"
 
-	group "Libraries"
+	-- Library directories relative to the premaket file in root/Premake
+	Library_Dir = {}
+	Library_Dir["POCO"] = "../Libraries/POCO/lib64"
+
+	--group "Libraries/POCO"
+		--externalproject "Poco_Foundation"
+		--location "../Libraries/POCO/Foundation"
+		--uuid "B01196CC-B693-4548-8464-2FF60499E73F"
+		--kind "StaticLib"
+		--language "C++"
+
+		--externalproject "Poco_Net"
+		--location "../Libraries/POCO/Net"
+		--uuid "B057A1FE-09F7-465E-B8B5-E1B659051D76"
+		--kind "StaticLib"
+		--language "C++"
 
 	group "API"
 
@@ -23,13 +40,12 @@ workspace "Virtual_Tabletop"
 			location "../%{prj.name}"
 			kind "StaticLib"
 			language "C++"
-			staticruntime "on"
 
 			targetdir ("../bin/" .. output_dir .. "/%{prj.name}")
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}")
 
-			pchheader "VTT_API_PCH.h"
-			pchsource "../Virtual_Tabletop_API/Source/VTT_API_PCH.cpp"
+			pchheader "VttApiPch.h"
+			pchsource "../Virtual_Tabletop_API/Source/VttApiPch.cpp"
 
 			files {
 
@@ -40,7 +56,11 @@ workspace "Virtual_Tabletop"
 			includedirs {
 
 				"../%{prj.name}/Include",
-				"../Libraries/spdlog/include"
+				"../Libraries/spdlog/include",
+			}
+
+			links {
+
 			}
 
 			filter "system:windows"
@@ -78,15 +98,15 @@ workspace "Virtual_Tabletop"
 
 		project "Client"
 			location "../Client"
-			kind "ConsoleApp"
+			kind "WindowedApp"
 			language "C++"
 			systemversion "latest"
 
 			targetdir ("../bin/" .. output_dir .. "/%{prj.name}/")
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
 
-			pchheader "VTT_Client_PCH.h"
-			pchsource "../Client/Source/VTT_Client_PCH.cpp"
+			pchheader "VttClientPch.h"
+			pchsource "../Client/Source/VttClientPch.cpp"
 
 			files {
 
@@ -104,6 +124,11 @@ workspace "Virtual_Tabletop"
 			links {
 
 				"Virtual_Tabletop_API"
+			}
+
+			defines {
+
+				"VTT_CLIENT"
 			}
 
 			filter "system:windows"
@@ -156,8 +181,8 @@ workspace "Virtual_Tabletop"
 			targetdir ("../bin/" .. output_dir .. "/%{prj.name}/")
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
 
-			pchheader "VTT_Server_PCH.h"
-			pchsource "../Server/Source/VTT_Server_PCH.cpp"
+			pchheader "VttServerPch.h"
+			pchsource "../Server/Source/VttServerPch.cpp"
 
 			files {
 
@@ -169,12 +194,17 @@ workspace "Virtual_Tabletop"
 
 				"../Libraries/spdlog/include",
 				"../Server/Include",
-				"../Virtual_Tabletop_API/Include"
+				"../Virtual_Tabletop_API/Include",
 			}
 
 			links {
 
 				"Virtual_Tabletop_API"
+			}
+
+			defines {
+
+				"VTT_SERVER"
 			}
 
 			filter "system:windows"
