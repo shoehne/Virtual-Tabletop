@@ -6,7 +6,7 @@
 
 /*<------Events------>*/
 #include <Events/Event.h>
-#include <Events/Application_Event.h>
+#include <Events/ApplicationEvent.h>
 
 namespace Virtual_TT_API {
 

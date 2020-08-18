@@ -7,6 +7,3 @@
 [submodule "Libraries/GLFW"]
 	path = Libraries/GLFW
 	url = https://github.com/shoehne/glfw
-[submodule "Libraries/POCO"]
-	path = Libraries/POCO
-	url = https://github.com/shoehne/poco

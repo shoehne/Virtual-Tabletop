@@ -1,4 +1,4 @@
-#include <VTT_API_PCH.h>
+#include <VttApiPch.h>
 #include "spdlog/sinks/stdout_color_sinks.h"
 
 #include <Core/Log.h>

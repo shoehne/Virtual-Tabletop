@@ -3,10 +3,10 @@
 #define EVENT_H
 
 /*<------PCH------>*/
-#include "VTT_API_PCH.h"
+#include "VttApiPch.h"
 
 #include "Core/Core.h"
-#include "Events/Event_Types.h"
+#include "Events/EventTypes.h"
 
 namespace Virtual_TT_API {
 
