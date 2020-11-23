@@ -7,3 +7,9 @@
 [submodule "Libraries/GLFW"]
 	path = Libraries/GLFW
 	url = https://github.com/shoehne/glfw
+[submodule "Libraries/curl"]
+	path = Libraries/curl
+	url = https://github.com/shoehne/curl.git
+[submodule "Libraries/curlcpp"]
+	path = Libraries/curlcpp
+	url = https://github.com/shoehne/curlcpp.git
