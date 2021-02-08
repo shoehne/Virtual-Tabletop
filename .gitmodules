@@ -1,0 +1,3 @@
+[submodule "Libraries/Virtual_Tabletop_API"]
+	path = Libraries/Virtual_Tabletop_API
+	url = https://github.com/shoehne/Virtual_Tabletop_API.git
