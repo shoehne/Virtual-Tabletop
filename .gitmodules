@@ -1,13 +1,3 @@
-
-[submodule "Libraries/curl"]
-	path = Libraries/curl
-	url = https://github.com/shoehne/curl.git
-[submodule "Libraries/curlcpp"]
-	path = Libraries/curlcpp
-	url = https://github.com/shoehne/curlcpp.git
-[submodule "Libraries/protobuf"]
-	path = Libraries/protobuf
-	url = https://github.com/shoehne/protobuf.git
 [submodule "Libraries/spdlog"]
 	path = Libraries/spdlog
 	url = https://github.com/gabime/spdlog.git
