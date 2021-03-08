@@ -1,2 +1,0 @@
-//------PCH------
-#include "VttApiPch.h"

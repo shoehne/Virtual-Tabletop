@@ -1,4 +1,4 @@
-workspace "Virtual_Tabletop API"
+workspace "Virtual_Tabletop_API"
 	location "../"
 	architecture "x64"
 	startproject "Virtual_Tabletop_API"
@@ -15,127 +15,110 @@ workspace "Virtual_Tabletop API"
 	-- Include directories relative to the premake file in root/Premake
 	Include_Dir = {}
 
-	group "API"
+	project "Virtual_Tabletop_API"
+		location "../%{prj.name}"
+		kind "StaticLib"
+		language "C++"
 
-		project "Virtual_Tabletop_API"
-			location "../%{prj.name}"
-			kind "StaticLib"
-			language "C++"
+		targetdir ("../bin/" .. output_dir .. "/%{prj.name}")
+		objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}")
 
-			targetdir ("../bin/" .. output_dir .. "/%{prj.name}")
-			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}")
+		pchheader "VttApiPch.h"
+		pchsource "../Virtual_Tabletop_API/Source/VttApiPch.cpp"
 
-			pchheader "VttApiPch.h"
-			pchsource "../Virtual_Tabletop_API/Source/VttApiPch.cpp"
+		files {
 
-			files {
+			"../%{prj.name}/Include/**.h",
+			"../%{prj.name}/Source/**.cpp",
+			"../%{prj.name}/Source/**.c++",
+			"../%{prj.name}/Source/**.cc"
+		}
 
-				"../%{prj.name}/Include/**.h",
-				"../%{prj.name}/Source/**.cpp",
-				"../%{prj.name}/Source/**.c++",
-				"../%{prj.name}/Source/**.cc"
-			}
+		includedirs {
 
-			includedirs {
+			"../%{prj.name}/Include",
+			"../Libraries/spdlog/include",
+			"../Libraries/yojimbo/"
+		}
 
-				"../%{prj.name}/Include",
-				"../Libraries/spdlog/include",
-				"../Libraries/curlcpp/include",
-				"../Libraries/curl/include",
-				"../Libraries/protobuf/src",
-				"../Libraries/capnproto/c++/src"
-			}
+		links {
+
+
+		}
+
+		defines {
+
+			
+		}
+
+		filter "system:windows"
+			staticruntime "on"
+			systemversion "latest"
 
 			links {
 
-
+				"winmm",
+				"wldap32",
+				"wsock32"
 			}
 
 			defines {
-
-				"CURL_STATICLIB"
+				"VTT_PLATFORM_WINDOWS"
 			}
 
-			filter "system:windows"
-				staticruntime "on"
-				systemversion "latest"
+		filter {"system:windows", "configurations:Debug"}
+			links {
 
-				links {
+				"../Libraries/yojimbo/bin/x64/Debug/yojimbo"
+			}
 
-					"winmm",
-					"wldap32",
-					"wsock32",
-				}
+		filter {"system:windows", "configurations:Release"}
+			links {
 
-				defines {
-					"VTT_PLATFORM_WINDOWS"
-				}
+				"../Libraries/yojimbo/bin/x64/Release/yojimbo"
+			}
 
-			filter {"system:windows", "configurations:Debug"}
-				links {
+		filter {"system:windows", "configurations:Distribution"}
+			links {
 
-					"../Libraries/curl/build/Win64/VC15/LIB Debug/libcurld",
-					"../Libraries/curlcpp/build/src/Debug/curlcpp",
-					"../Libraries/protobuf/cmake/Debug/libprotobufd",
-					"../Libraries/protobuf/cmake/Debug/libprotobuf-lited",
-					"../Libraries/protobuf/cmake/Debug/libprotocd"
-				}
+				"../Libraries/yojimbo/bin/x64/Release/yojimbo"
+			}
 
-			filter {"system:windows", "configurations:Release"}
-				links {
+		filter "system:linux"
+			staticruntime "on"
 
-					"../Libraries/curl/build/Win64/VC15/LIB Release/libcurl",
-					"../Libraries/curlcpp/build/src/Release/curlcpp",
-					"../Libraries/protobuf/cmake/Release/libprotobuf",
-					"../Libraries/protobuf/cmake/Release/libprotobuf-lite",
-					"../Libraries/protobuf/cmake/Release/libprotoc"
-				}
+			defines {
 
-			filter {"system:windows", "configurations:Distribution"}
-				links {
+				"VTT_PLATFORM_LINUX"
+			}
 
-					"../Libraries/curl/build/Win64/VC15/LIB Release/libcurl",
-					"../Libraries/curlcpp/build/src/Release/curlcpp",
-					"../Libraries/protobuf/cmake/Release/libprotobuf",
-					"../Libraries/protobuf/cmake/Release/libprotobuf-lite",
-					"../Libraries/protobuf/cmake/Release/libprotoc"					
-				}
+		filter {"system:linux", "configurations:Debug"}
+		filter {"system:linux", "configurations:Release"}
+		filter {"system:linux", "configurations:Distribution"}
 
-			filter "system:linux"
-				staticruntime "on"
+		filter "configurations:Debug"
+			defines {
 
-				defines {
+				"VTT_DEBUG"
+			}
+			runtime "Debug"
+			symbols "on"
 
-					"VTT_PLATFORM_LINUX"
-				}
+		filter "configurations:Release"
+			defines {
 
-			filter {"system:linux", "configurations:Debug"}
-			filter {"system:linux", "configurations:Release"}
-			filter {"system:linux", "configurations:Distribution"}
+				"VTT_RELEASE"
+			}
+			runtime "Release"
+			optimize "on"
 
-			filter "configurations:Debug"
-				defines {
+		filter "configurations:Distribution"
+			defines {
 
-					"VTT_DEBUG"
-				}
-				runtime "Debug"
-				symbols "on"
-
-			filter "configurations:Release"
-				defines {
-
-					"VTT_RELEASE"
-				}
-				runtime "Release"
-				optimize "on"
-
-			filter "configurations:Distribution"
-				defines {
-
-					"VTT_DISTRIBUTION"
-				}
-				runtime "Release"
-				optimize "on"
+				"VTT_DISTRIBUTION"
+			}
+			runtime "Release"
+			optimize "on"
 
 workspace "Virtual_Tabletop"
 	location "../"
@@ -178,7 +161,8 @@ workspace "Virtual_Tabletop"
 
 				"../Client/Include",
 				"../Libraries/spdlog/include",
-				"../Virtual_Tabletop_API/Include"
+				"../Virtual_Tabletop_API/Include",
+				"../Libraries/yojimbo/"
 			}
 
 			links {
@@ -255,6 +239,7 @@ workspace "Virtual_Tabletop"
 				"../Libraries/spdlog/include",
 				"../Server/Include",
 				"../Virtual_Tabletop_API/Include",
+				"../Libraries/yojimbo/"
 			}
 
 			links {
