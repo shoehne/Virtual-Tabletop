@@ -1,4 +1,4 @@
-workspace "Virtual_Tabletop"
+workspace "Virtual-Tabletop"
 	location "../"
 	architecture "x64"
 	startproject "Client"
@@ -21,7 +21,6 @@ workspace "Virtual_Tabletop"
 			location "../Client"
 			kind "WindowedApp"
 			language "C++"
-			systemversion "latest"
 
 			targetdir ("../bin/" .. output_dir .. "/%{prj.name}/")
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
@@ -39,12 +38,12 @@ workspace "Virtual_Tabletop"
 
 				"../Client/Include",
 				"../Libraries/spdlog/include",
-				"../Virtual_Tabletop_API/Include"
+				"../Virtual-Tabletop-API/Include"
 			}
 
 			links {
 
-				"Virtual_Tabletop_API"
+				"Virtual-Tabletop-API"
 			}
 
 			defines {
@@ -53,6 +52,7 @@ workspace "Virtual_Tabletop"
 			}
 
 			filter "system:windows"
+				systemversion "latest"
 				defines {
 
 					"VTT_PLATFORM_WINDOWS"
@@ -93,8 +93,8 @@ workspace "Virtual_Tabletop"
 
 	group "Server"
 
-		project "Server"
-			location "../Server"
+		project "Game-Server"
+			location "../Server/Game-Server"
 			kind "ConsoleApp"
 			language "C++"
 			systemversion "latest"
@@ -102,25 +102,25 @@ workspace "Virtual_Tabletop"
 			targetdir ("../bin/" .. output_dir .. "/%{prj.name}/")
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
 
-			pchheader "VttServerPch.h"
-			pchsource "../Server/Source/VttServerPch.cpp"
+			pchheader "VttGameServerPch.h"
+			pchsource "../Server/Game-ServerSource/VttGameServerPch.cpp"
 
 			files {
 
-				"../Server/Include/**.h",
-				"../Server/Source/**.cpp"
+				"../Server/Game-Server/Include/**.h",
+				"../Server/Game-Server/Source/**.cpp"
 			}
 
 			includedirs {
 
 				"../Libraries/spdlog/include",
-				"../Server/Include",
-				"../Virtual_Tabletop_API/Include",
+				"../Server/Game-Server/Include",
+				"../Virtual-Tabletop-API/Include",
 			}
 
 			links {
 
-				"Virtual_Tabletop_API"
+				"Virtual-Tabletop-API"
 			}
 
 			defines {
