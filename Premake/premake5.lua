@@ -1,7 +1,7 @@
-workspace "Virtual_Tabletop_API"
+workspace "Virtual-Tabletop-API"
 	location "../"
 	architecture "x64"
-	startproject "Virtual_Tabletop_API"
+	startproject "Virtual-Tabletop-API"
 
 	configurations {
 
@@ -15,7 +15,7 @@ workspace "Virtual_Tabletop_API"
 	-- Include directories relative to the premake file in root/Premake
 	Include_Dir = {}
 
-	project "Virtual_Tabletop_API"
+	project "Virtual-Tabletop-API"
 		location "../%{prj.name}"
 		kind "StaticLib"
 		language "C++"
@@ -24,7 +24,7 @@ workspace "Virtual_Tabletop_API"
 		objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}")
 
 		pchheader "VttApiPch.h"
-		pchsource "../Virtual_Tabletop_API/Source/VttApiPch.cpp"
+		pchsource "../Virtual-Tabletop-API/Source/VttApiPch.cpp"
 
 		files {
 
@@ -120,7 +120,7 @@ workspace "Virtual_Tabletop_API"
 			runtime "Release"
 			optimize "on"
 
-workspace "Virtual_Tabletop"
+workspace "Virtual-Tabletop"
 	location "../"
 	architecture "x64"
 	startproject "Client"
@@ -143,7 +143,7 @@ workspace "Virtual_Tabletop"
 			location "../Client"
 			kind "WindowedApp"
 			language "C++"
-			systemversion "latest"
+			
 
 			targetdir ("../bin/" .. output_dir .. "/%{prj.name}/")
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
@@ -161,13 +161,13 @@ workspace "Virtual_Tabletop"
 
 				"../Client/Include",
 				"../Libraries/spdlog/include",
-				"../Virtual_Tabletop_API/Include",
+				"../Virtual-Tabletop-API/Include",
 				"../Libraries/yojimbo/"
 			}
 
 			links {
 
-				"Virtual_Tabletop_API"
+				"Virtual-Tabletop-API"
 			}
 
 			defines {
@@ -176,6 +176,7 @@ workspace "Virtual_Tabletop"
 			}
 
 			filter "system:windows"
+				systemversion "latest"
 				defines {
 
 					"VTT_PLATFORM_WINDOWS"
@@ -216,35 +217,34 @@ workspace "Virtual_Tabletop"
 
 	group "Server"
 
-		project "Server"
-			location "../Server"
+		project "Game-Server"
+			location "../Server/Game-Server"
 			kind "ConsoleApp"
 			language "C++"
-			systemversion "latest"
 
 			targetdir ("../bin/" .. output_dir .. "/%{prj.name}/")
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
 
-			pchheader "VttServerPch.h"
-			pchsource "../Server/Source/VttServerPch.cpp"
+			pchheader "VttGameServerPch.h"
+			pchsource "../Server/Game-Server/Source/VttGameServerPch.cpp"
 
 			files {
 
-				"../Server/Include/**.h",
-				"../Server/Source/**.cpp"
+				"../Server/Game-Server/Include/**.h",
+				"../Server/Game-Server/Source/**.cpp"
 			}
 
 			includedirs {
 
 				"../Libraries/spdlog/include",
-				"../Server/Include",
-				"../Virtual_Tabletop_API/Include",
+				"../Server/Game-Server/Include",
+				"../Virtual-Tabletop-API/Include",
 				"../Libraries/yojimbo/"
 			}
 
 			links {
 
-				"Virtual_Tabletop_API"
+				"Virtual-Tabletop-API"
 			}
 
 			defines {
@@ -253,6 +253,7 @@ workspace "Virtual_Tabletop"
 			}
 
 			filter "system:windows"
+				systemversion "latest"
 				defines {
 
 					"VTT_PLATFORM_WINDOWS"
@@ -269,6 +270,81 @@ workspace "Virtual_Tabletop"
 
 						"/MT"
 					}
+
+			filter "system:linux"
+				defines {
+
+					"VTT_PLATFORM_LINUX"
+				}
+
+			filter "configurations:Debug"
+				defines "VTT_DEBUG"
+				runtime "Debug"
+				symbols "on"
+
+			filter "configurations:Release"
+				defines "VTT_RELEASE"
+				runtime "Release"
+				optimize "on"
+
+			filter "configurations:Distribution"
+				defines "VTT_DISTRIBUTION"
+				runtime "Release"
+				optimize "on"
+		
+		project "Lobby-Server"
+			location "../Server/Lobby-Server"
+			kind "ConsoleApp"
+			language "C++"
+		
+			targetdir ("../bin/" .. output_dir .. "/%{prj.name}/")
+			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
+
+			pchheader "VttLobbyServerPch.h"
+			pchsource "../Server/Lobby-Server/Source/VttLobbyServerPch.cpp"
+
+			files {
+
+				"../Server/Lobby-Server/Include/**.h",
+				"../Server/Lobby-Server/Source/**.cpp"
+			}
+
+			includedirs {
+
+				"../Libraries/spdlog/include",
+				"../Server/Lobby-Server/Include",
+				"../Virtual-Tabletop-API/Include",
+				"../Libraries/yojimbo/"
+			}
+
+			links {
+
+				"Virtual-Tabletop-API"
+			}
+
+			defines {
+
+				"VTT_SERVER"
+			}
+
+			filter "system:windows"
+				systemversion "latest"
+				defines {
+
+					"VTT_PLATFORM_WINDOWS"
+				}
+
+			filter {"system:windows", "configurations:Debug"}
+				buildoptions {
+
+					"/MTd"
+				}
+
+			filter {"system:windows", "configurations:Release"}
+				buildoptions {
+
+					"/MT"
+				}
 
 			filter "system:linux"
 				defines {
