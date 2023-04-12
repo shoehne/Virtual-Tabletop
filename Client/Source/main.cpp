@@ -2,10 +2,26 @@
 #include "VttClientPch.h"
 
 #include "Core/ClientApp.h"
+#ifdef PLATFORM_WINDOWS
+#pragma comment(linker, "/ENTRY:mainCRTStartup")
+#endif // PLATFORM_WINDOWS
+
 
 int main(int argc, char** argv) {
 
-	Virtual_TT_Client::ClientApp* client_app = new Virtual_TT_Client::ClientApp();
+	#ifdef DEBUG | RELEASE && PLATFORM_WINDOWS
+	AllocConsole();
+	freopen("CONOUT$",
+		"w+",
+		stdout);
+	freopen("CONOUT$",
+		"w+",
+		stderr);
+	#endif // DEBUG && PLATFORM_WINDOWS
+
+	Vtt_Client::ClientApp* client_app = new Vtt_Client::ClientApp();
+
+	client_app->Init();
 
 	client_app->Run();
 }

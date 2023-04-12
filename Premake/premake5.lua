@@ -13,7 +13,12 @@ workspace "Virtual-Tabletop"
 	output_dir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 	-- Include directories relative to the premake file in root/Premake
-	Include_Dir = {}
+	IncludeDir = {}
+	IncludeDir["VTTAPI"] = "../Virtual-Tabletop-API/Include"
+	IncludeDir["spdlog"] = "../Libraries/spdlog/include"
+	IncludeDir["ImGui"] = "../Libraries/imgui"
+	IncludeDir["optick"] = "../Libraries/optick/src"
+	IncludeDir["yaml"] = "../Libraries/yaml-cpp/include"
 
 	group "Client"
 
@@ -21,6 +26,7 @@ workspace "Virtual-Tabletop"
 			location "../Client"
 			kind "WindowedApp"
 			language "C++"
+			cppdialect "c++20"
 
 			targetdir ("../bin/" .. output_dir .. "/%{prj.name}/")
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
@@ -37,25 +43,36 @@ workspace "Virtual-Tabletop"
 			includedirs {
 
 				"../Client/Include",
-				"../Libraries/spdlog/include",
-				"../Virtual-Tabletop-API/Include"
+				"%{IncludeDir.spdlog}",
+				"%{IncludeDir.VTTAPI}",
+				"%{IncludeDir.ImGui}",
+				"%{IncludeDir.optick}",
+				"%{IncludeDir.yaml}"
 			}
 
 			links {
 
-				"Virtual-Tabletop-API"
+				"Virtual-Tabletop-API",
+				"../bin/" .. output_dir .. "/ImGui/ImGui",
+				"../bin/" .. output_dir .. "/yaml-cpp/yaml-cpp"
 			}
 
 			defines {
 
-				"VTT_CLIENT"
+				"CLIENT"
 			}
 
 			filter "system:windows"
 				systemversion "latest"
 				defines {
 
-					"VTT_PLATFORM_WINDOWS"
+					"PLATFORM_WINDOWS"
+				}
+				links {
+
+					"Rpcrt4",
+					"d3dcompiler",
+					"d3d11"
 				}
 
 			filter {"system:windows", "configurations:Debug"}
@@ -63,31 +80,37 @@ workspace "Virtual-Tabletop"
 
 					"/MTd"
 				}
+				links {
+					
+				}
 
 			filter {"system:windows", "configurations:Release"}
 				buildoptions {
 
 					"/MT"
 				}
+				links {
+
+				}
 
 			filter "system:linux"
 				defines {
 
-					"VTT_PLATFORM_LINUX"
+					"PLATFORM_LINUX"
 				}
 
 			filter "configurations:Debug"
-				defines "VTT_DEBUG"
+				defines "DEBUG"
 				runtime "Debug"
 				symbols "on"
 
 			filter "configurations:Release"
-				defines "VTT_RELEASE"
+				defines "RELEASE"
 				runtime "Release"
 				optimize "on"
 
 			filter "configurations:Distribution"
-				defines "VTT_DISTRIBUTION"
+				defines "DISTRIBUTION"
 				runtime "Release"
 				optimize "on"
 
@@ -115,7 +138,7 @@ workspace "Virtual-Tabletop"
 
 				"../Libraries/spdlog/include",
 				"../Server/Game-Server/Include",
-				"../Virtual-Tabletop-API/Include",
+				"%{IncludeDir.VTTAPI}"
 			}
 
 			links {
@@ -125,13 +148,13 @@ workspace "Virtual-Tabletop"
 
 			defines {
 
-				"VTT_SERVER"
+				"SERVER"
 			}
 
 			filter "system:windows"
 				defines {
 
-					"VTT_PLATFORM_WINDOWS"
+					"PLATFORM_WINDOWS"
 				}
 
 			filter {"system:windows", "configurations:Debug"}
@@ -149,20 +172,115 @@ workspace "Virtual-Tabletop"
 			filter "system:linux"
 				defines {
 
-					"VTT_PLATFORM_LINUX"
+					"PLATFORM_LINUX"
 				}
 
 			filter "configurations:Debug"
-				defines "VTT_DEBUG"
+				defines "DEBUG"
 				runtime "Debug"
 				symbols "on"
 
 			filter "configurations:Release"
-				defines "VTT_RELEASE"
+				defines "RELEASE"
 				runtime "Release"
 				optimize "on"
 
 			filter "configurations:Distribution"
-				defines "VTT_DISTRIBUTION"
+				defines "DISTRIBUTION"
 				runtime "Release"
 				optimize "on"
+
+	group "Libraries"
+		project "Virtual-Tabletop-API"
+			location "../%{prj.name}"
+			kind "StaticLib"
+			language "C++"
+
+			targetdir ("../bin/" .. output_dir .. "/%{prj.name}")
+			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}")
+
+			files {
+
+				"../%{prj.name}/Include/**.h",
+				"../%{prj.name}/Source/**.cpp",
+				"../%{prj.name}/Source/**.c++",
+				"../%{prj.name}/Source/**.cc"
+			}
+
+			includedirs {
+
+				"../%{prj.name}/Include",
+				"%{IncludeDir.spdlog}",
+				"%{IncludeDir.yaml}"
+			}
+
+			links {
+
+
+			}
+
+			defines {
+
+				
+			}
+
+			filter "system:windows"
+				staticruntime "on"
+				systemversion "latest"
+
+				links {
+
+					"winmm",
+					"wldap32",
+					"wsock32"
+				}
+
+				defines {
+					"PLATFORM_WINDOWS"
+				}
+
+			filter {"system:windows", "configurations:Debug"}
+
+			filter {"system:windows", "configurations:Release"}
+
+			filter {"system:windows", "configurations:Distribution"}
+
+			filter "system:linux"
+				staticruntime "on"
+
+				defines {
+
+					"PLATFORM_LINUX"
+				}
+
+			filter {"system:linux", "configurations:Debug"}
+			filter {"system:linux", "configurations:Release"}
+			filter {"system:linux", "configurations:Distribution"}
+
+			filter "configurations:Debug"
+				defines {
+
+					"DEBUG"
+				}
+				runtime "Debug"
+				symbols "on"
+
+			filter "configurations:Release"
+				defines {
+
+					"RELEASE"
+				}
+				runtime "Release"
+				optimize "on"
+
+			filter "configurations:Distribution"
+				defines {
+
+					"DISTRIBUTION"
+				}
+				runtime "Release"
+				optimize "on"
+		include "../Libraries/imgui"
+		include "../Libraries/optick/premake-core-only"
+		include "../Libraries/yaml-cpp"
+	group "TTRPG Modules"

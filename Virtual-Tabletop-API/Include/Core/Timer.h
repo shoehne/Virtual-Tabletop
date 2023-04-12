@@ -2,7 +2,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-namespace Virtual_Tt_Api {
+namespace Vtt_Api {
 
 	class Timer {
 

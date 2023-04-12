@@ -2,6 +2,7 @@
 .vs
 bin/
 bin-obj/
+Client/logs
 Libraries/
 .codelite/
 
@@ -32,3 +33,7 @@ Virtual_Tabletop_API/compile_flags.txt
 **.fls
 Documentation/**.log
 **.synctex.gz
+
+# Miscellaneous files
+Client/config.yaml
+Client/imgui.ini

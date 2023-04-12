@@ -1,24 +1,42 @@
-#include <VttApiPch.h>
 #include "spdlog/sinks/stdout_color_sinks.h"
+#include "spdlog/sinks/daily_file_sink.h"
 
-#include <Core/Log.h>
+#include "Core/Log.h"
 
-namespace Virtual_Tt_Api {
 
-	std::shared_ptr<spdlog::logger> Log::api_logger;
-	std::shared_ptr<spdlog::logger> Log::client_logger;
-	std::shared_ptr<spdlog::logger> Log::server_logger;
 
-	void Log::Init() {
+std::shared_ptr<spdlog::logger> Vtt_Api::Log::api_logger;
+std::shared_ptr<spdlog::logger> Vtt_Api::Log::client_logger;
+std::shared_ptr<spdlog::logger> Vtt_Api::Log::server_logger;
 
-		spdlog::set_pattern("%^[%Y/%m/%d %T] %n: %v%$");
-		api_logger = spdlog::stdout_color_mt("API");
-		api_logger->set_level(spdlog::level::trace);
+void Vtt_Api::Log::Init() {
 
-		client_logger = spdlog::stdout_color_mt("CLIENT");
-		client_logger->set_level(spdlog::level::trace);
+	// Vector holding logging sinks
+	std::vector<spdlog::sink_ptr> sinks;
+	spdlog::set_pattern("%^[%T] %n: %v%$");
+	// Console and file logging for debug
+	#ifdef DEBUG
+	auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+	sinks.push_back(console_sink);
+	#endif // DEBUG
+	// File logging only for release
+	auto file_sink = std::make_shared<spdlog::sinks::daily_file_sink_mt>("logs/log.txt",
+		0, 00);
+	sinks.push_back(file_sink);
 
-		server_logger = spdlog::stdout_color_mt("SERVER");
-		server_logger->set_level(spdlog::level::trace);
-	}
+	api_logger = std::make_shared<spdlog::logger>("API", 
+		begin(sinks), 
+		end(sinks));
+	api_logger->set_level(spdlog::level::info);
+	api_logger->flush_on(spdlog::level::info);
+
+	client_logger = std::make_shared<spdlog::logger>("CLIENT", 
+		begin(sinks), 
+		end(sinks));
+	client_logger->set_level(spdlog::level::info);
+	client_logger->flush_on(spdlog::level::info);
+
+	server_logger = std::make_shared<spdlog::logger>("SERVER", 
+		begin(sinks), 
+		end(sinks));
 }

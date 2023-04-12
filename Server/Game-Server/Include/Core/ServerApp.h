@@ -4,7 +4,7 @@
 
 #include <VirtualTabletopApi.h>
 
-class ServerApp : public Virtual_TT_API::Application {
+class ServerApp : public Vtt_Api::Application {
 
 public:
 	ServerApp();

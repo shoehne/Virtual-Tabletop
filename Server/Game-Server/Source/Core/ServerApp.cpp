@@ -15,7 +15,7 @@ ServerApp::~ServerApp() {
 
 void ServerApp::Init() {
 
-	Virtual_TT_API::Log::Init();
+	Vtt_Api::Log::Init();
 	VTT_SERVER_INFO("Initialised Log");
 }
 

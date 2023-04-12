@@ -1,24 +1,24 @@
 #pragma once
 #ifndef APPLICATION_H
 #define APPLICATION_H
-/*<------Core------>*/
-#include "Core/Core.h"
 
-/*<------Events------>*/
+#include "Core/Core.h"
 #include <Events/Event.h>
 #include <Events/ApplicationEvent.h>
 
-namespace Virtual_Tt_Api {
+namespace Vtt_Api {
 
-	class  Application {
+	class Application {
 
 	public:
-		Application();
-		virtual ~Application();
+		Application() = default;
+		virtual ~Application() = default;
 
 		virtual void Init() = 0;
+		bool IsRunning() { return is_running; }
+		virtual void OnEvent(Event& event) = 0;
 		virtual void Run() = 0;
-		virtual void Stop();
+		virtual void Stop() { is_running = false; }
 
 	private:
 		bool is_running = true;

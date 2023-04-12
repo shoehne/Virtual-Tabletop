@@ -4,18 +4,33 @@
 
 #include <VirtualTabletopApi.h>
 
-namespace Virtual_TT_Client {
+#include "Core/Window.h"
+#include "Events/ApplicationEvent.h"
+#include "Platform/ImGui/ImGuiWindowStack.h"
 
-	class ClientApp : public Virtual_TT_API::Application {
+namespace Vtt_Client {
+
+	class ClientApp : public Vtt_Api::Application {
 
 	public:
 		ClientApp();
 		~ClientApp();
+		
+		virtual void Init() override;
+		const Vtt_Api::Ref<Window> GetMainWindow();
+		virtual void OnEvent(Vtt_Api::Event& event) override;
+		virtual void Run() override;
 
-		void Init();
-		void Run();
+	private:
+		bool OnImGuiWndClose(Vtt_Client::ImGuiWindowCloseEvent& event);
+		bool OnWindowClose(Vtt_Api::WindowCloseEvent& event);
+		void PopImGuiWindow(ImGuiWindow* window);
+		void PopImGuiWindow(uint64_t window_id);
+		void PushImGuiWindow(ImGuiWindow* window);
+		
+		ImGuiWindowStack imgui_windows;
+		Vtt_Api::Ref<Window> main_window;
 	};
 }
 
 #endif // !CLIENT_APP_H
-
