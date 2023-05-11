@@ -26,7 +26,7 @@ workspace "Virtual-Tabletop"
 			location "../Client"
 			kind "WindowedApp"
 			language "C++"
-			cppdialect "c++20"
+			cppdialect "C++20"
 
 			targetdir ("../bin/" .. output_dir .. "/%{prj.name}/")
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
@@ -120,13 +120,11 @@ workspace "Virtual-Tabletop"
 			location "../Server/Game-Server"
 			kind "ConsoleApp"
 			language "C++"
+			cppdialect "C++20"
 			systemversion "latest"
 
 			targetdir ("../bin/" .. output_dir .. "/%{prj.name}/")
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
-
-			pchheader "VttGameServerPch.h"
-			pchsource "../Server/Game-ServerSource/VttGameServerPch.cpp"
 
 			files {
 
@@ -190,11 +188,19 @@ workspace "Virtual-Tabletop"
 				runtime "Release"
 				optimize "on"
 
+		project "Lobby-Server"
+			location "../Server/Lobby-Server"
+			kind "ConsoleApp"
+			language "C++"
+			cppdialect "C++20"
+			systemversion "latest"
+
 	group "Libraries"
 		project "Virtual-Tabletop-API"
 			location "../%{prj.name}"
 			kind "StaticLib"
 			language "C++"
+			cppdialect "C++20"
 
 			targetdir ("../bin/" .. output_dir .. "/%{prj.name}")
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}")
