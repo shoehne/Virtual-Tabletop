@@ -1,60 +1,101 @@
+#include <cmath>
+
+#include "Events/GameEvent.h"
 #include "GameBasics/AbilityScore.h"
 
-Vtt_Api::AbilityScore::AbilityScore(UUID id)
-	: ability_score_id(id) {}
-
-void Vtt_Api::AbilityScore::AddScoreModifier(int8_t score,
+Vtt_Api::AbilityScore::AbilityScore(GameStatType* type,
 	const std::wstring& name) {
 
-	ability_score_modifiers.emplace_back(AbilityScoreModifier(name,
-		score));
-}
+	stat_type = type;
+	if (!name.empty()) {
 
-int8_t Vtt_Api::AbilityScore::GetBaseScore() {
-
-	return base_score;
-}
-
-int8_t Vtt_Api::AbilityScore::GetAbilityScore() {
-
-	int8_t ability_score = base_score;
-	if (!ability_score_modifiers.empty()) {
-
-		for (int i = 0; i < ability_score_modifiers.size(); i++) {
-
-			ability_score += ability_score_modifiers.at(i).modifier_value;
-		}
+		stat_name = name;
 	}
 	else {
 
-		return ability_score;
+		stat_name = L"New Ability Score";
 	}
-	
-	return ability_score;
+	stat_value_total = stat_value_base;
 }
 
-std::wstring Vtt_Api::AbilityScore::GetAbilityScoreDescription() {
+Vtt_Api::AbilityScore::AbilityScore(GameStatType* type,
+	int16_t mod_basis,
+	int16_t mod_increment,
+	const std::wstring& name) {
 
-	std::wstring description = std::wstring();
-	description.append(name + L" base score: " + (wchar_t)base_score + L"\n");
-	if (!ability_score_modifiers.empty()) {
+	stat_type = type;
+	ability_score_modifier.modfier_basis = mod_basis;
+	ability_score_modifier.modifier_increment = mod_increment;
+	if (!name.empty()) {
 
-		for (int i = 0; i < ability_score_modifiers.size(); i++) {
-
-			description.append(L"\n" + ability_score_modifiers.at(i).modifier_name + L": " + 
-				(wchar_t)ability_score_modifiers.at(i).modifier_value);
-			if (i == ability_score_modifiers.size() - 1) {
-
-				description.append(L"\n");
-			}
-		}
+		stat_name = name;
 	}
-	description.append(L"\nTotal" + name + L": " + (wchar_t)GetAbilityScore());
+	else {
 
-	return description;
+		stat_name = L"New Ability Score";
+	}
+	stat_value_total = stat_value_base;
 }
 
-void Vtt_Api::AbilityScore::SetBaseScore(int8_t score) {
+std::wstring Vtt_Api::AbilityScore::GetStatTooltip() {
 
-	base_score = score;
+	std::wstring tooltip;
+
+	return tooltip;
+}
+
+void Vtt_Api::AbilityScore::DecrementAbilityScore(int16_t value) {
+
+	stat_value_base -= value;
+}
+
+int8_t Vtt_Api::AbilityScore::GetAbilityScoreMod() {
+
+	return ability_score_modifier.modifier;
+}
+
+void Vtt_Api::AbilityScore::IncrementAbilityScore(int16_t value) {
+
+	stat_value_base += value;
+}
+
+void Vtt_Api::AbilityScore::SetAbilityModBasis(int16_t value) {
+
+	ability_score_modifier.modfier_basis = value;
+}
+
+void Vtt_Api::AbilityScore::SetAbilityModIncrement(int8_t value) {
+
+	ability_score_modifier.modifier_increment = value;
+}
+
+void Vtt_Api::AbilityScore::CalculateAbilityScoreMod() {
+
+	int8_t ability_score_mod_new;
+	int8_t ability_score_mod_temp = stat_value_total - ability_score_modifier.modfier_basis;
+	if (ability_score_mod_temp < 0) {
+
+		ability_score_mod_new = std::ceil(ability_score_mod_temp / ability_score_modifier.modifier_increment);
+	}
+	else {
+
+		ability_score_mod_new = std::floor(ability_score_mod_temp & ability_score_modifier.modifier_increment);
+	}
+
+	/*---
+	* Should the new ability score modifier be different from the old one create a AbilityScoreEvent to update
+	* and recalculate everything using this specific ability score modifier.
+	---*/
+	if (ability_score_mod_new != ability_score_modifier.modifier) {
+
+		ability_score_modifier.modifier = ability_score_mod_new;
+
+		Vtt_Api::AbilityScoreEvent event(&ability_score_modifier);
+		event_callback(event);
+	}
+}
+
+void Vtt_Api::AbilityScore::CalculateTotalValue() {
+
+
 }

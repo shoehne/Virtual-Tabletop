@@ -11,6 +11,7 @@
 namespace Vtt_Api {
 
 	class Entity;
+	class NonPlayerCharacter;
 	class PlayerCharacter;
 
 	class EntityManager {
@@ -21,6 +22,9 @@ namespace Vtt_Api {
 		Entity CreateEntity(const std::wstring& name = std::wstring()); 
 		Entity CreateEntity(UUID id,
 			const std::wstring& name = std::wstring());
+		NonPlayerCharacter CreateNpc(const std::wstring& name = std::wstring());
+		NonPlayerCharacter CreateNpc(UUID id,
+			const std::wstring& name = std::wstring());
 		PlayerCharacter CreatePlayerCharacter(const std::wstring& name = std::wstring());
 		PlayerCharacter CreatePlayerCharacter(UUID id,
 			const std::wstring& name = std::wstring());
@@ -30,6 +34,7 @@ namespace Vtt_Api {
 		entt::registry entity_registry;
 
 		friend class Entity;
+		friend class NonPlayerCharacter;
 		friend class PlayerCharacter;
 	};
 }

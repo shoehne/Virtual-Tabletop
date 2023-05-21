@@ -39,9 +39,20 @@ namespace Vtt_Api {
 		UUID id;
 	};
 
+	struct NpcComponent {
+
+		NpcComponent() = default;
+		NpcComponent(const NpcComponent&) = default;
+
+		bool is_npc = true;
+	};
+
 	struct PlayerComponent {
 
 		PlayerComponent() = default;
+		PlayerComponent(const PlayerComponent&) = default;
+
+		bool is_player = true;
 	};
 
 	struct PropertyComponent {
@@ -69,11 +80,15 @@ namespace Vtt_Api {
 	struct TargetComponent {
 
 		TargetComponent() = default;
+		TargetComponent(const TargetComponent&) = default;
+
+		bool is_target = true;
 	};
 
-	enum class EntityType : uint8_t {
+	enum EntityType : uint8_t {
 
 		ENTITY,
+		NONPLAYERCHARACTER,
 		PLAYERCHARACTER
 	};
 
@@ -81,8 +96,6 @@ namespace Vtt_Api {
 
 		TypeComponent() = default;
 		TypeComponent(const TypeComponent&) = default;
-		TypeComponent(EntityType& type)
-			: entity_type(type) {}
 
 		EntityType entity_type;
 	};

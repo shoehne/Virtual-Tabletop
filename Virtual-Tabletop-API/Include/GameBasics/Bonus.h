@@ -2,48 +2,36 @@
 #ifndef BONUS_H
 #define BONUS_H
 
-#include "Core/UUID.h"
-
 #include <string>
-#include <unordered_map>
 
 namespace Vtt_Api {
 
-	struct BonusType;
+	struct BonusType {
+		
+		BonusType() = default;
+
+		std::wstring bonus_type_description;
+		std::wstring bonus_type_name;
+		bool stacks_same = false;
+		bool stacks_other = false;
+	};
 
 	class Bonus {
 
 	public:
-		Bonus();
-		Bonus(BonusType type,
-			int8_t value,
-			const std::wstring& description = std::wstring(),
-			const std::wstring& name = std::wstring());
+		Bonus() = default;
+		Bonus(BonusType* type,
+			int8_t value)
+			: bonus_type(type), bonus_value(value) {}
+
+		std::wstring GetBonusDescription() { return bonus_type->bonus_type_description; }
+		std::wstring GetBonusName() { return bonus_type->bonus_type_name; }
+		int8_t GetBonusValue() { return bonus_value; }
+		void SetBonusValue(int8_t value) { bonus_value = value; }
 
 	private:
-		std::wstring bonus_description;
-		std::wstring bonus_name;
-		BonusType bonus_type;
+		BonusType* bonus_type;
 		int8_t bonus_value;
-	};
-
-	class BonusMap {
-		
-	public:
-		BonusMap() = default;
-
-	private:
-		std::unordered_map<UUID, Bonus> bonus_map = std::unordered_map<UUID, Bonus>();
-	};
-
-	struct BonusType {
-		
-		
-	};
-
-	struct BonusTypeList {
-
-		std::vector<BonusType> bonus_types;
 	};
 }
 
