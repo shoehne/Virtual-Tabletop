@@ -41,6 +41,7 @@ namespace Vtt_Api {
 	enum class EntityType : uint8_t {
 
 		ENTITY,
+		NONPLAYERCHARACTER,
 		PLAYERCHARACTER
 	};
 

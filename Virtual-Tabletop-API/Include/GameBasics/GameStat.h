@@ -2,6 +2,9 @@
 #ifndef GAMESTAT_H
 #define GAMESTAT_H
 
+#include <string>
+#include <vector>
+
 #include "Events/Event.h"
 #include "GameBasics/Bonus.h"
 
@@ -14,7 +17,7 @@ namespace Vtt_Api {
 
 		std::wstring stat_name;
 	};
-	
+
 	class GameStat {
 
 	public:
@@ -25,3 +28,4 @@ namespace Vtt_Api {
 }
 
 #endif // !GAMESTAT_H
+
