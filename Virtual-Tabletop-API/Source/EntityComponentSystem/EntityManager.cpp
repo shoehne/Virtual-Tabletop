@@ -1,45 +1,28 @@
-#include "Core/UUID.h"
 #include "EntityComponentSystem/Entity.h"
-#include "EntityComponentSystem/PlayerCharacter.h"
 
 Vtt_Api::Entity Vtt_Api::EntityManager::CreateEntity(const std::wstring& name) {
 
-	return CreateEntity(UUID(),
+	return CreateEntity(GameDataId(),
 		name);
 }
 
-Vtt_Api::Entity Vtt_Api::EntityManager::CreateEntity(UUID id,
+Vtt_Api::Entity Vtt_Api::EntityManager::CreateEntity(GameDataId id,
 	const std::wstring& name) {
 
 	Entity entity = { entity_registry.create(), this };
-	entity.AddComponent<IdComponent>(uint64_t(id));
+	IdComponent& entity_id = entity.AddComponent<IdComponent>();
+	entity_id.game_data_id = id;
 	TagComponent& entity_tag = entity.AddComponent<TagComponent>();
-	entity_tag.tag = name.empty() ? L"New Entity" : name;
-	entity.AddComponent<TypeComponent>(EntityType::ENTITY);
+	if (!name.empty()) {
 
-	entity_map[id] = entity;
+		entity_tag.tag = name;
+	}
+	else {
+
+		entity_tag.tag = L"New Entity";
+	}
+	TypeComponent& entity_type = entity.AddComponent<TypeComponent>();
+	entity_type.entity_type = EntityType::ENTITY;
 
 	return entity;
-}
-
-Vtt_Api::PlayerCharacter Vtt_Api::EntityManager::CreatePlayerCharacter(const std::wstring& name) {
-
-	return CreatePlayerCharacter(UUID(),
-		name);
-}
-
-Vtt_Api::PlayerCharacter Vtt_Api::EntityManager::CreatePlayerCharacter(UUID id,
-	const std::wstring& name) {
-
-	PlayerCharacter player_character = { entity_registry.create(), this };
-	player_character.AddComponent<IdComponent>(id);
-	TagComponent& player_character_tag = player_character.AddComponent<TagComponent>();
-	player_character_tag.tag = name.empty() ? L"New Player Character" : name;
-	player_character.AddComponent<TypeComponent>(EntityType::PLAYERCHARACTER);
-	player_character.AddComponent<TargetComponent>();
-	player_character.AddComponent<PlayerComponent>();
-
-	entity_map[id] = player_character;
-
-	return player_character;
 }

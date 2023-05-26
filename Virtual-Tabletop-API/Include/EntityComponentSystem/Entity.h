@@ -12,13 +12,17 @@ namespace Vtt_Api {
 	public:
 		Entity() = default;
 		Entity(entt::entity handle,
-			EntityManager* manager);
-		Entity(Entity& copy) = default;
-		
+			EntityManager* manager)
+			: entity_handle(handle), entity_manager(manager) {}
+		Entity(Entity& entity_copy) = default;
+
+		/*---
+		* Templated functions to add, replace, delete or check for entities.
+		---*/
 		template<typename T, typename... Args>
 		T& AddComponent(Args&&... args) {
 
-			T& component = entity_manager->entity_registry.emplace<T>(entity_handle, 
+			T& component = entity_manager->entity_registry.get_or_emplace<T>(entity_handle,
 				std::forward<Args>(args)...);
 
 			return component;
@@ -36,15 +40,15 @@ namespace Vtt_Api {
 
 			return entity_manager->entity_registry.get<T>(entity_handle);
 		}
-		template<typename T>
-		bool HasAllComponents() {
+		template<typename... T>
+		bool HasAllOfComponents() {
 
-			return entity_manager->entity_registry.all_of<T>(entity_handle);
+			return entity_manager->entity_registry.all_of<T...>(entity_handle);
 		}
-		template<typename T>
-		bool HasAnyComponent() {
+		template<typename... T>
+		bool HasAnyOfComponents() {
 
-			return entity_manager->entity_registry.any_of<T>(entity_handle);
+			return entity_manager->entity_registry.any_of<T...>(entity_handle);
 		}
 		template<typename T>
 		void RemoveComponent() {
@@ -52,16 +56,8 @@ namespace Vtt_Api {
 			entity_manager->entity_registry.remove<T>(entity_handle);
 		}
 
-		UUID GetId() {
-
-			return GetComponent<IdComponent>().id;
-		}
-
-		operator bool() const { return entity_handle != entt::null; }
-		operator entt::entity() const { return entity_handle; }
-
 	private:
-		entt::entity entity_handle{ entt::null };
+		entt::entity entity_handle = { entt::null };
 		EntityManager* entity_manager = nullptr;
 	};
 }

@@ -6,8 +6,6 @@
 #include <string>
 
 #include "Core/Core.h"
-#include "Core/UUID.h"
-
 #include "EntityComponentSystem/EnTT/entt.hpp"
 
 namespace Vtt_Api {
