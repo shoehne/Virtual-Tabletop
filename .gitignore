@@ -3,7 +3,11 @@
 bin/
 bin-obj/
 Client/logs
-Libraries/
+Libraries/googletest
+Libraries/imgui
+Libraries/optick
+Libraries/spdlog
+Libraries/yaml-cpp
 .codelite/
 
 # Visual Studio files

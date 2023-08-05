@@ -10,3 +10,6 @@
 [submodule "Libraries/yaml-cpp"]
 	path = Libraries/yaml-cpp
 	url = https://github.com/shoehne/yaml-cpp
+[submodule "Libraries/googletest"]
+	path = Libraries/googletest
+	url = https://github.com/shoehne/googletest

@@ -12,18 +12,27 @@ workspace "Virtual-Tabletop"
 
 	output_dir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+	-- Group directories relative to the premake file in root/Premake
+	GroupDir = {}
+	GroupDir["Client"] = "../Client"
+	GroupDir["Server"] = "../Server"
+	GroupDir["Libraries"] = "../Libraries"
 	-- Include directories relative to the premake file in root/Premake
 	IncludeDir = {}
-	IncludeDir["VTTAPI"] = "../Virtual-Tabletop-API/Include"
-	IncludeDir["spdlog"] = "../Libraries/spdlog/include"
-	IncludeDir["ImGui"] = "../Libraries/imgui"
-	IncludeDir["optick"] = "../Libraries/optick/src"
-	IncludeDir["yaml"] = "../Libraries/yaml-cpp/include"
+	IncludeDir["Client"] = "%{GroupDir.Client}/Client/Include"
+	IncludeDir["Game-Server"] = "%{GroupDir.Server}/Game-Server/Include"
+	IncludeDir["VTTAPI"] = "%{GroupDir.Libraries}/Virtual-Tabletop-API/Virtual-Tabletop-API/Include"
+	IncludeDir["spdlog"] = "%{GroupDir.Libraries}/spdlog/include"
+	IncludeDir["ImGui"] = "%{GroupDir.Libraries}/imgui"
+	IncludeDir["optick"] = "%{GroupDir.Libraries}/optick/src"
+	IncludeDir["yaml"] = "%{GroupDir.Libraries}/yaml-cpp/include"
+	IncludeDir["googletest"] = "%{GroupDir.Libraries}/googletest/googletest"
+	
 
 	group "Client"
 
 		project "Client"
-			location "../Client"
+			location "%{GroupDir.Client}/Client"
 			kind "WindowedApp"
 			language "C++"
 			cppdialect "c++20"
@@ -32,17 +41,17 @@ workspace "Virtual-Tabletop"
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
 
 			pchheader "VttClientPch.h"
-			pchsource "../Client/Source/VttClientPch.cpp"
+			pchsource "../Client/Client/Source/VttClientPch.cpp"
 
 			files {
 
-				"../Client/Include/**.h",
-				"../Client/Source/**.cpp",
+				"%{GroupDir.Client}/Client/Include/**.h",
+				"%{GroupDir.Client}/Client/Source/**.cpp",
 			}
 
 			includedirs {
 
-				"../Client/Include",
+				"%{IncludeDir.Client}",
 				"%{IncludeDir.spdlog}",
 				"%{IncludeDir.VTTAPI}",
 				"%{IncludeDir.ImGui}",
@@ -113,11 +122,49 @@ workspace "Virtual-Tabletop"
 				defines "DISTRIBUTION"
 				runtime "Release"
 				optimize "on"
+		
+		project "Client-Test"
+			location "%{GroupDir.Client}/Client-Test"
+			kind "ConsoleApp"
+			language "C++"
+
+			targetdir ("../bin/".. output_dir .. "&{prj.name}/")
+			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
+
+			files {
+
+				"%{GroupDir.Client}/Client-Test/Include/**.h",
+				"%{GroupDir.Client}/Client-Test/Source/**.cpp"
+			}
+
+			includedirs {
+
+				"%{IncludeDir.Client}",
+				"%{GroupDir.Client}/Client-Test/Include",
+				"%{GroupDir.Client}/Client-Test/Source",
+				"%{IncludeDir.googletest}",
+				"%{IncludeDir.googletest}/include"
+			}
+
+			filter {"system:windows", "configurations:Debug"}
+				buildoptions {
+
+					"/MTd"
+				}
+				links {
+
+					"../bin/" .. output_dir .. "/GoogleTest/GoogleTest",
+				}
+
+			filter "configurations:Debug"
+				defines "DEBUG"
+				runtime "Debug"
+				symbols "on"
 
 	group "Server"
 
 		project "Game-Server"
-			location "../Server/Game-Server"
+			location "%{GroupDir.Server}/Game-Server"
 			kind "ConsoleApp"
 			language "C++"
 			systemversion "latest"
@@ -126,18 +173,18 @@ workspace "Virtual-Tabletop"
 			objdir ("../bin-obj/" .. output_dir .. "/%{prj.name}/")
 
 			pchheader "VttGameServerPch.h"
-			pchsource "../Server/Game-ServerSource/VttGameServerPch.cpp"
+			pchsource "%{GroupDir.Server}/Game-Server/Source/VttGameServerPch.cpp"
 
 			files {
 
-				"../Server/Game-Server/Include/**.h",
-				"../Server/Game-Server/Source/**.cpp"
+				"%{GroupDir.Server}/Game-Server/Include/**.h",
+				"%{GroupDir.Server}/Server/Game-Server/Source/**.cpp"
 			}
 
 			includedirs {
 
 				"../Libraries/spdlog/include",
-				"../Server/Game-Server/Include",
+				"%{IncludeDir.Server}",
 				"%{IncludeDir.VTTAPI}"
 			}
 
@@ -192,7 +239,7 @@ workspace "Virtual-Tabletop"
 
 	group "Libraries"
 		project "Virtual-Tabletop-API"
-			location "../%{prj.name}"
+			location "%{GroupDir.Libraries}/Virtual-Tabletop-API/%{prj.name}"
 			kind "StaticLib"
 			language "C++"
 
@@ -201,15 +248,15 @@ workspace "Virtual-Tabletop"
 
 			files {
 
-				"../%{prj.name}/Include/**.h",
-				"../%{prj.name}/Source/**.cpp",
-				"../%{prj.name}/Source/**.c++",
-				"../%{prj.name}/Source/**.cc"
+				"%{GroupDir.Libraries}/Virtual-Tabletop-API/%{prj.name}/Include/**.h",
+				"%{GroupDir.Libraries}/Virtual-Tabletop-API/%{prj.name}/Source/**.cpp",
+				"%{GroupDir.Libraries}/Virtual-Tabletop-API/%{prj.name}/Source/**.c++",
+				"%{GroupDir.Libraries}/Virtual-Tabletop-API/%{prj.name}/Source/**.cc"
 			}
 
 			includedirs {
 
-				"../%{prj.name}/Include",
+				"%{IncludeDir.VTTAPI}",
 				"%{IncludeDir.spdlog}",
 				"%{IncludeDir.yaml}"
 			}
@@ -280,6 +327,13 @@ workspace "Virtual-Tabletop"
 				}
 				runtime "Release"
 				optimize "on"
+
+		project "Virtual-Tabletop-API-Test"
+			location "%{GroupDir.Libraries}/Virtual-Tabletop-API/Virtual-Tabletop-API-Test"
+			kind "ConsoleApp"
+			language "C++"
+
+		include "../Libraries/googletest"
 		include "../Libraries/imgui"
 		include "../Libraries/optick/premake-core-only"
 		include "../Libraries/yaml-cpp"
