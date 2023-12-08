@@ -15,9 +15,9 @@ namespace Vtt_Client {
 		~ImGuiWindowStack();
 
 		bool IsEmpty();
-		void PopWindow(ImGuiWindow* window);
-		void PopWindow(uint64_t window_id);
-		void PushWindow(ImGuiWindow* window);
+		uint16_t PopWindow(ImGuiWindow* window);
+		uint16_t PopWindow(uint64_t window_id);
+		uint16_t PushWindow(ImGuiWindow* window);
 
 		std::vector<ImGuiWindow*>::iterator begin() { return windows.begin(); }
 		std::vector<ImGuiWindow*>::iterator end() { return windows.end(); }

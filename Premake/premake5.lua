@@ -28,6 +28,7 @@ workspace "Virtual-Tabletop"
 	IncludeDir["optick"] = "%{GroupDir.Libraries}/optick/src"
 	IncludeDir["yaml"] = "%{GroupDir.Libraries}/yaml-cpp/include"
 	IncludeDir["googletest"] = "%{GroupDir.Libraries}/googletest/googletest"
+	IncludeDir["googlemock"] = "%{GroupDir.Libraries}/googletest/googlemock"
 	
 
 	group "Client"
@@ -224,7 +225,8 @@ workspace "Virtual-Tabletop"
 				"%{IncludeDir.VTTAPI}",
 				"%{IncludeDir.spdlog}",
 				"%{IncludeDir.yaml}",
-				"%{IncludeDir.googletest}/include"
+				"%{IncludeDir.googletest}/include",
+				"%{IncludeDir.googlemock}/include"
 			}
 
 			links {
@@ -327,13 +329,16 @@ workspace "Virtual-Tabletop"
 				"%{IncludeDir.spdlog}",
 				"%{IncludeDir.yaml}",
 				"%{IncludeDir.googletest}/include",
+				"%{IncludeDir.googlemock}/include",
+				"%{IncludeDir.ImGui}",
 				"../Tests/Include"
 			}
 
 			links {
 
 				"Virtual-Tabletop-API",
-				"../bin/" .. output_dir .. "/GoogleTest/GoogleTest"
+				"../bin/" .. output_dir .. "/GoogleTest/GoogleTest",
+				"../bin/" .. output_dir .. "/GoogleMock/GoogleMock"
 			}
 
 			filter {"system:windows"}

@@ -75,8 +75,19 @@ void Vtt_Client::ClientApp::Run() {
 
 bool Vtt_Client::ClientApp::OnImGuiWndClose(Vtt_Client::ImGuiWindowCloseEvent& event) {
 
-	PopImGuiWindow(event.GetId());
-	return true;
+	uint16_t error_code = PopImGuiWindow(event.GetId());
+	if (error_code == 0) {
+
+		return true;
+	}
+	else {
+
+		VTT_CLIENT_ERROR("Failed to close window!/nWindow ID: {0}/nErrorcode: {1}",
+			event.GetId(),
+			error_code);
+
+		return false;
+	}
 }
 
 bool Vtt_Client::ClientApp::OnWindowClose(Vtt_Api::WindowCloseEvent& event) {
@@ -85,17 +96,17 @@ bool Vtt_Client::ClientApp::OnWindowClose(Vtt_Api::WindowCloseEvent& event) {
 	return true;
 }
 
-void Vtt_Client::ClientApp::PopImGuiWindow(ImGuiWindow* window) {
+uint16_t Vtt_Client::ClientApp::PopImGuiWindow(ImGuiWindow* window) {
 
-	imgui_windows.PopWindow(window);
+	return imgui_windows.PopWindow(window);
 }
 
-void Vtt_Client::ClientApp::PopImGuiWindow(uint64_t window_id) {
+uint16_t Vtt_Client::ClientApp::PopImGuiWindow(uint64_t window_id) {
 
-	imgui_windows.PopWindow(window_id);
+	return imgui_windows.PopWindow(window_id);
 }
 
-void Vtt_Client::ClientApp::PushImGuiWindow(ImGuiWindow* window) {
+uint16_t Vtt_Client::ClientApp::PushImGuiWindow(ImGuiWindow* window) {
 
-	imgui_windows.PushWindow(window);
+	return imgui_windows.PushWindow(window);
 }

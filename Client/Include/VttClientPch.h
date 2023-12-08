@@ -2,7 +2,9 @@
 #ifndef VIRTUAL_CLIENT_PCH_H
 #define VIRTUAL_CLIENT_PCH_H
 
+#include "Core/ApiErrorCode.h"
 #include "Core/Log.h"
+#include "Core/ClientErrorCode.h"
 
 #include "Events/ApplicationEvent.h"
 
@@ -11,6 +13,7 @@
 #include "Platform/ImGui/StartUpWindow.h"
 
 #include <exception>
+#include <stdint.h>
 #include <stdlib.h>
 #include <fstream>
 

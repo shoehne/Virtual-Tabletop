@@ -21,12 +21,14 @@ namespace Vtt_Client {
 		virtual void OnEvent(Vtt_Api::Event& event) override;
 		virtual void Run() override;
 
+	protected:
+		uint16_t PopImGuiWindow(ImGuiWindow* window);
+
 	private:
 		bool OnImGuiWndClose(Vtt_Client::ImGuiWindowCloseEvent& event);
 		bool OnWindowClose(Vtt_Api::WindowCloseEvent& event);
-		void PopImGuiWindow(ImGuiWindow* window);
-		void PopImGuiWindow(uint64_t window_id);
-		void PushImGuiWindow(ImGuiWindow* window);
+		uint16_t PopImGuiWindow(uint64_t window_id);
+		uint16_t PushImGuiWindow(ImGuiWindow* window);
 		
 		ImGuiWindowStack imgui_windows;
 		Vtt_Api::Ref<Window> main_window;

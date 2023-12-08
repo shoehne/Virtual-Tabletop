@@ -22,6 +22,7 @@ namespace Vtt_Api {
 	protected:
 		KeyEvent(const KeyCode code) 
 			: key_code(code) {}
+		KeyEvent() = default;
 
 		KeyCode key_code;
 	};

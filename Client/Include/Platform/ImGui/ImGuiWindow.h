@@ -12,7 +12,12 @@ namespace Vtt_Client {
 
 	public:
 		using EventCallbackFn = std::function<void(Vtt_Api::Event&)>;
-
+		/*---
+		* !Important!
+		* Any newly created instance of an ImGuiWindow must assign a valid
+		* Vtt_Api::UUID to the window_id variable. This should be done upon
+		* creating the new instance.
+		---*/
 		virtual ~ImGuiWindow() = default;
 
 		virtual void Init() = 0;
